@@ -1,0 +1,6 @@
+rootProject.name = 'worldofsoccer-2025-ms'
+include 'match-service'
+include 'teams-service'
+include 'league-service'
+include 'location-service'
+include 'api-gateway'

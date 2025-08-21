@@ -1,0 +1,23 @@
+INSERT INTO teams (team_id, team_name, coach, founding_year, budget, team_status) VALUES
+                                                                                      ('550e8400-e29b-41d4-a716-446655440000', 'FC Barcelona', 'Xavi Hernandez', 1899, 500000000.00, 'IS_PLAYING'),
+                                                                                      ('6f9619ff-8b86-d011-b42d-00cf4fc964ff', 'Real Madrid', 'Carlo Ancelotti', 1902, 600000000.00, 'RESTING'),
+                                                                                      ('3fa85f64-5717-4562-b3fc-2c963f66afa6', 'Manchester United', 'Erik ten Hag', 1878, 550000000.00, 'IS_PLAYING'),
+                                                                                      ('ef3b6b5d-91cc-4a54-8c4d-84a8c78e3f11', 'Bayern Munich', 'Thomas Tuchel', 1900, 450000000.00, 'RESTING'),
+                                                                                      ('f47ac10b-58cc-4372-a567-0e02b2c3d479', 'Paris Saint-Germain', 'Luis Enrique', 1970, 700000000.00, 'IS_PLAYING'),
+                                                                                      ('00112233-4455-6677-8899-aabbccddeeff', 'Manchester City', 'Pep Guardiola', 1880, 750000000.00, 'RESTING'),
+                                                                                      ('123e4567-e89b-12d3-a456-426614174000', 'Liverpool FC', 'Jurgen Klopp', 1892, 650000000.00, 'IS_PLAYING'),
+                                                                                      ('7c9e6679-7425-40de-944b-e07fc1f90ae7', 'Juventus', 'Massimiliano Allegri', 1897, 400000000.00, 'RESTING'),
+                                                                                      ('b9788f10-0038-4121-9b83-39aa8f0eabe0', 'AC Milan', 'Stefano Pioli', 1899, 420000000.00, 'IS_PLAYING'),
+                                                                                      ('c74c3a4e-bb73-4e3f-bc6f-3691b28814b3', 'Inter Milan', 'Simone Inzaghi', 1908, 430000000.00, 'RESTING');
+
+INSERT INTO players (player_id, first_name, last_name, age, nationality, jersey_number, position, team_id) VALUES
+                                                                                                               ('8e5c69a4-a485-49b9-92cb-f0f69b8c5f23', 'Lionel', 'Messi', 36, 'Argentina', 10, 'FORWARD', '550e8400-e29b-41d4-a716-446655440000'),
+                                                                                                               ('d9b92c37-b589-4993-bca3-1a9c86952444', 'Karim', 'Benzema', 35, 'France', 9, 'FORWARD', '6f9619ff-8b86-d011-b42d-00cf4fc964ff'),
+                                                                                                               ('c3d8ff6a-b8c7-44eb-8f9f-59a28c4fa6f3', 'Bruno', 'Fernandes', 28, 'Portugal', 8, 'MIDFIELDER', '3fa85f64-5717-4562-b3fc-2c963f66afa6'),
+                                                                                                               ('f8c4a36a-dc7f-41cb-a15b-2b8e4e61259b', 'Joshua', 'Kimmich', 29, 'Germany', 6, 'MIDFIELDER', 'ef3b6b5d-91cc-4a54-8c4d-84a8c78e3f11'),
+                                                                                                               ('e3b14fdc-b126-4b3d-9348-2a14b91e956c', 'Kylian', 'Mbappe', 25, 'France', 7, 'FORWARD', 'f47ac10b-58cc-4372-a567-0e02b2c3d479'),
+                                                                                                               ('b10a5e98-854f-4e46-903d-4e8e85e57f43', 'Pedri', 'Gonzalez', 21, 'Spain', 16, 'MIDFIELDER', '550e8400-e29b-41d4-a716-446655440000'),
+                                                                                                               ('8ab97e4b-457c-4c5c-a934-8d3b7d6c1cb5', 'Vinicius', 'Junior', 24, 'Brazil', 20, 'FORWARD', '6f9619ff-8b86-d011-b42d-00cf4fc964ff'),
+                                                                                                               ('d67cbde3-0c86-48e4-b054-302f4e5df0a9', 'Marcus', 'Rashford', 27, 'England', 10, 'FORWARD', '3fa85f64-5717-4562-b3fc-2c963f66afa6'),
+                                                                                                               ('f6a742e8-89e9-4e89-b5e2-9e92345c30f7', 'Alphonso', 'Davies', 23, 'Canada', 19, 'DEFENDER', 'ef3b6b5d-91cc-4a54-8c4d-84a8c78e3f11'),
+                                                                                                               ('ccfa3a10-9b52-4b5e-a81e-3549b42eb7e2', 'Achraf', 'Hakimi', 26, 'Morocco', 2, 'DEFENDER', 'f47ac10b-58cc-4372-a567-0e02b2c3d479');

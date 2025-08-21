@@ -1,0 +1,199 @@
+@startuml
+
+hide circle
+top to bottom direction
+scale 0.2
+!define ENTITY(entityName) class entityName << Entity >>
+!define AGGREGATE(aggregateName) class aggregateName << Aggregate >>
+!define AGGREGATE_ROOT(aggregateRootName) class aggregateRootName << Aggregate Root >>
+!define AGGREGATE_ROOT_ENTITY(aggregateRootEntityName) class aggregateRootEntityName << Aggregate Root >> << Entity >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+!define ENUM(enumName) class enumName << Enum >>
+!pragma useVerticalIf on
+skinparam dpi 350
+skinparam packageStyle rectangle
+skinparam rectangle {
+    BackgroundColor #f7f4eb
+    BorderColor Black
+}
+
+rectangle "World Of Soccer Domain Model" as BoundedContextSoccer #line.dashed {
+
+  Package "Match Management Sub-Domain" <<Rectangle>> #DFBDF4 {
+    AGGREGATE_ROOT(Match) #LightBlue {
+      matchScore: String
+      matchStatus: MatchStatusEnum
+      matchTime: Time
+      matchDate: Date
+      matchDuration: Time
+      // Invariant: A Match status update must update the associated Venue state
+    }
+
+    VALUE_OBJECT(MatchIdentifier) #Bisque {
+      match: UUID
+    }
+
+    VALUE_OBJECT(MatchResults) #Bisque {
+      type: ResultTypeEnum
+      matchMinute: Integer
+    }
+
+    ENUM(ResultsTypeEnum)  {
+      WINNER
+      LOSER
+      DRAW
+    }
+
+    ENUM(MatchStatusEnum) {
+      SCHEDULED
+      IN_PROGRESS
+      COMPLETED
+      CANCELED
+    }
+
+    ENTITY(Referee) #lightgray {
+      name: String
+      nationality: String
+      experienceYears: Integer
+      assignedMatches: List<Match>
+    }
+  }
+
+  Package "Team & Player Management Sub-Domain" <<Rectangle>> #LightBlue {
+    ENTITY(Player) #lightPink {
+      firstName: String
+      lastName: String
+      age: Integer
+      position: PositionEnum
+      jerseyNumber: Integer
+      nationality: String
+    }
+
+    VALUE_OBJECT(PlayerIdentifier) #Bisque {
+      playerId: UUID
+    }
+
+    ENTITY(Team) #lightPink {
+      name: String
+      coach: String
+      foundingYear: Integer
+      budget: Decimal
+    }
+
+    VALUE_OBJECT(TeamIdentifier) #Bisque {
+      teamId: UUID
+    }
+
+    ENTITY(PlayerContract) #lightgray {
+      player: Player
+      team: Team
+      salary: Decimal
+      contractDuration: Integer
+    }
+
+    ENUM(PositionEnum) {
+      GOALKEEPER
+      DEFENDER
+      MIDFIELDER
+      FORWARD
+    }
+
+    ENUM(TeamStatus) {
+      IS_PLAYING
+      RESTING
+    }
+  }
+
+  Package "League & Competition Sub-Domain" <<Rectangle>> #LightGreen {
+    ENTITY(League) #lightPink {
+      name: String
+      country: String
+      format: FormatTypeEnum
+      numberOfTeams: Integer
+      leagueDifficulty: String
+    }
+
+    VALUE_OBJECT(Season) #Bisque {
+      year: Integer
+      startDate: Date
+      endDate: Date
+    }
+
+    VALUE_OBJECT(CompetitionFormat) #Bisque {
+      type: FormatTypeEnum
+      groupStage: Boolean
+      knockout: Boolean
+    }
+
+    VALUE_OBJECT(LeagueIdentifier) #Bisque {
+      leagueId: UUID
+    }
+
+
+
+    ENUM(FormatTypeEnum) {
+      LEAGUE
+      TOURNAMENT
+      CUP
+    }
+  }
+
+  Package "Location & Venues Sub-Domain" <<Rectangle>> #Violet {
+    ENTITY(Venue) #lightPink {
+      name: String
+      capacity: Integer
+      city: String
+      yearBuilt: Integer
+      // Invariant: The Venue state must always reflect the current Match status.
+    }
+
+    VALUE_OBJECT(VenueIdentifier) #Bisque {
+      venueId: UUID
+    }
+
+    ENTITY(StadiumFacilities) #lightgray {
+      vipSections: Integer
+      parkingCapacity: Integer
+      weatherConditions: String
+    }
+
+    ENUM(VenueState) {
+      UPCOMING
+      LIVE
+      PAST
+      CANCELED
+    }
+  }
+
+
+
+
+  }
+
+  Match "1" o--> "M" Team
+  Match --> MatchIdentifier
+  Match --> MatchResults
+  Match --> Referee
+  Team "1" o--> "M" Player
+  Team --> TeamIdentifier
+  Team --> TeamStatus
+  MatchResults --> ResultsTypeEnum
+  Player --> PositionEnum
+  Player --> PlayerIdentifier
+  Player --> PlayerContract
+  League "1" o--> "M" Season
+  League "1" o--> "M" CompetitionFormat
+  League --> FormatTypeEnum
+  League --> LeagueIdentifier
+  Match --> MatchStatusEnum
+  Match --> League
+  Match --> Venue
+  Venue --> VenueIdentifier
+  Venue --> VenueState
+  Venue --> StadiumFacilities
+  Season --> LeagueIdentifier
+  Season --> TeamIdentifier
+
+  Match --> VenueState : "Updates VenueState"
+
+@enduml

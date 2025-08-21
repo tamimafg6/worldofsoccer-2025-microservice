@@ -1,0 +1,81 @@
+# Default Spring Profile
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.com.worldofsoccer: DEBUG
+    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.mongodb.driver: DEBUG
+    org.springframework.data.mongodb.embedded: DEBUG
+
+---
+
+#for test
+spring:
+  config:
+    activate:
+      on-profile: test
+
+  data:
+    mongodb:
+      username: user
+      password: pwd
+      host: localhost
+      port: 0
+      database: match-db
+      authentication-database: admin
+      auto-index-creation: true
+
+de:
+  flapdoodle:
+    mongodb:
+      embedded:
+        version: 5.0.5
+
+---
+app:
+  teams-service:
+    host: localhost
+    port: 7001
+  league-service:
+    host: localhost
+    port: 7002
+  location-service:
+    host: localhost
+    port: 7003
+
+---
+
+# for docker
+
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+
+  data:
+    mongodb:
+      username: user
+      password: pwd
+      host: mongodb
+      port: 27017
+      database: match-db
+      authentication-database: admin
+      auto-index-creation: true
+
+server.port: 8080
+
+app:
+  teams-service:
+    host: teams-service
+    port: 8080
+  league-service:
+    host: league-service
+    port: 8080
+  location-service:
+    host: location-service
+    port: 8080

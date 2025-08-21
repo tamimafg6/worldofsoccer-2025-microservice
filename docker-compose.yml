@@ -1,0 +1,205 @@
+services:
+  api-gateway:
+    container_name: api-gateway
+    hostname: api-gateway
+    build: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - teams-service
+      - league-service
+      - location-service
+  teams-service:
+    build: teams-service
+    container_name: teams-service
+    hostname: teams-service
+    ports:
+      - "8081:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      postgres1:
+        condition: service_healthy
+
+  league-service:
+    build: league-service
+    container_name: league-service
+    hostname: league-service
+    ports:
+      - "8082:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      mysql2:
+        condition: service_healthy
+
+
+  location-service:
+    build: location-service
+    container_name: location-service
+    hostname: location-service
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      mysql3:
+        condition: service_healthy
+
+  match-service:
+    build: match-service
+    container_name: match-service
+    hostname: match-service
+    ports:
+      - "8084:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - league-service
+      - teams-service
+      - location-service
+      - mongodb
+
+
+  postgres1:
+    image: postgres:latest
+    container_name: postgres1-teams
+    hostname: postgres1
+    environment:
+      - POSTGRES_USER=user
+      - PGUSER=user # need this to avoid fatal error "no role ROOT found"
+      - POSTGRES_PASSWORD=pwd
+      - POSTGRES_DB=teams-db # must match what's in the application.yml datasource url
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: "pg_isready -h postgres1"
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin1:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin1-teams
+    restart: always
+    ports:
+      - "9000:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=admin@afghanyar.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+    depends_on:
+      - postgres1
+
+
+
+  mysql2:
+    image: mysql:5.7
+    hostname: mysql2
+    container_name: mysql2-league
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=league-db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql2:/var/lib/mysql2
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin2:
+    image: phpmyadmin:5.2.0
+    container_name: phpmyadmin2-league
+    hostname: phpmyadmin2
+    links:
+      - mysql2
+    restart: always
+    ports:
+      - "5014:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+  mysql3:
+    image: mysql:5.7
+    hostname: mysql3
+    container_name: mysql3-location
+    ports:
+      - "3309:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpwd
+      - MYSQL_DATABASE=location-db
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=pwd
+    volumes:
+      - ./data/mysql3:/var/lib/mysql3
+      - ./data/init.d:/docker-entrypoint-initdb.d
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-uuser",
+          "-ppwd",
+          "-h",
+          "localhost",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  phpmyadmin3:
+    image: phpmyadmin:5.2.0
+    container_name: phpmyadmin3-location
+    hostname: phpmyadmin3
+    links:
+      - mysql3
+    restart: always
+    ports:
+      - "5015:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+
+
+  mongodb:
+      image: mongo
+      container_name: mongo_db
+      ports:
+        - 27017:27017
+      volumes:
+        - mongo:/data
+      environment:
+        - MONGO_INITDB_ROOT_USERNAME=user
+        - MONGO_INITDB_ROOT_PASSWORD=pwd
+
+  mongo-express:
+      image: mongo-express
+      container_name: mongo-express
+      restart: always
+      ports:
+        - 8085:8081
+      environment:
+        - ME_CONFIG_MONGODB_ADMINUSERNAME=user
+        - ME_CONFIG_MONGODB_ADMINPASSWORD=pwd
+        - ME_CONFIG_MONGODB_SERVER=mongodb
+
+volumes:
+    mongo: { }

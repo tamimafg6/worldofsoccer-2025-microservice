@@ -1,0 +1,46 @@
+# Default Spring Profile
+server:
+  error:
+    include-message: always
+
+logging:
+  level:
+    root: INFO
+    com.worldofsoccer: DEBUG
+
+app:
+  teams-service:
+    host: localhost
+    port: 7001
+  league-service:
+    host: localhost
+    port: 7002
+  location-service:
+    host: localhost
+    port: 7003
+  match-service:
+    host: localhost
+    port: 7004
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: docker
+
+server.port: 8080
+
+app:
+  teams-service:
+    host: teams-service
+    port: 8080
+  league-service:
+    host: league-service
+    port: 8080
+  location-service:
+    host: location-service
+    port: 8080
+  match-service:
+    host: match-service
+    port: 8080

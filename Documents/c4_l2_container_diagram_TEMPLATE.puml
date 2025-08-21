@@ -1,0 +1,55 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/RicardoNiepel/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!define FONTAWESOME https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/font-awesome-5
+
+!include FONTAWESOME/users.puml
+
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+AddRelTag(aggregate_root, $lineColor="red")
+
+LAYOUT_TOP_DOWN()
+SHOW_PERSON_OUTLINE()
+
+title Container Diagram for World of Soccer System
+
+Person(match_manager, "Match Manager", "Match manager of the soccer world")
+Person(player,        "Player",        "Player of the soccer world")
+
+System_Boundary(worldofsoccer, "World of Soccer System") {
+  Container(webapp,            "Web Application",     "JavaScript, React", "Delivers the static content and the world of soccer single page application.")
+  Container(singlepage_app,    "Single-Page App",     "JavaScript, React", "Provides all user-facing match, team and venue functionality in the browser.")
+  Container(api_gateway,       "API-Gateway",         "Java, Spring Boot", "Exposes JSON/REST endpoints for all services", $tags="microService")
+  Container(match_service,     "match-service",       "Java, Spring Boot", "Aggregates match data via REST",        $tags="microService")
+  Container(teams_service,     "teams-service",       "Java, Spring Boot", "CRUD operations for teams",            $tags="microService")
+  Container(league_service,    "league-service",      "Java, Spring Boot", "CRUD operations for leagues",          $tags="microService")
+  Container(location_service,  "location-service",    "Java, Spring Boot", "CRUD operations for locations",        $tags="microService")
+
+  ContainerDb(match_db,         "Match DB",            "MongoDB",           "Stores match information",             $tags="storage")
+  ContainerDb(teams_db,         "Teams DB",            "Postgres",       "Stores team information",              $tags="storage")
+  ContainerDb(league_db,        "League DB",           "MySQL 5.5.x",          "Stores league information",            $tags="storage")
+  ContainerDb(location_db,      "Location DB",         "MySQL 5.5.x",       "Stores location information",          $tags="storage")
+}
+
+Rel(match_manager, webapp,         "Visits worldofsoccer.com",         "HTTPS")
+Rel_R(webapp,       singlepage_app, "Delivers SPA to the browser")
+Rel(match_manager, singlepage_app, "Views teams, venues & leagues",    "HTTPS")
+Rel(player,        singlepage_app, "Views match status",                "HTTPS")
+
+Rel(singlepage_app, api_gateway,    "API calls to",                     "JSON/REST/HTTPS")
+Rel(api_gateway,    match_service,  "API calls to",                     "JSON/REST/HTTPS")
+Rel(api_gateway,    teams_service,  "API calls to",                     "JSON/REST/HTTPS")
+Rel(api_gateway,    league_service, "API calls to",                     "JSON/REST/HTTPS")
+Rel(api_gateway,    location_service,"API calls to",                    "JSON/REST/HTTPS")
+
+Rel(match_service,  teams_service,  "Aggregates team data via",         "JSON/REST/HTTPS")
+Rel(match_service,  league_service, "Aggregates league data via",       "JSON/REST/HTTPS")
+Rel(match_service,  location_service,"Aggregates location data via",     "JSON/REST/HTTPS")
+
+Rel_D(match_service,    match_db,    "Reads from and writes to",         "JDBC")
+Rel_D(teams_service,    teams_db,    "Reads from and writes to",         "JDBC")
+Rel_D(league_service,   league_db,   "Reads from and writes to",         "JDBC")
+Rel_D(location_service, location_db, "Reads from and writes to",         "JDBC")
+@enduml
