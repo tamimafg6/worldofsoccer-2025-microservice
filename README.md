@@ -116,7 +116,7 @@ There’s also a convenience script at the repo root:
 The test_all.bash helper exists at the top level. 
 GitHub
 
-🛠 Common Gradle Tasks
+# Common Gradle Tasks
 # Build everything
 ./gradlew build
 
@@ -126,7 +126,7 @@ GitHub
 # Format/verify (if you add plugins later)
 ./gradlew check
 
-🗂 Environment & Configuration
+ Environment & Configuration
 
 - Put service-specific settings in src/main/resources/application.yml (or .properties) per microservice.
 
