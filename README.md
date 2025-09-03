@@ -5,7 +5,7 @@ A small Spring Boot microservices project for managing soccer data (teams, leagu
 Services in this repo: api-gateway, teams-service, league-service, location-service, match-service. The repo also includes Gradle wrapper and a docker-compose.yml for running everything together. 
 GitHub
 
-# 🧱 Project Structure
+#  Project Structure
 worldofsoccer-2025-microservice/
 ├─ api-gateway/           # Edge service / routes to backend services
 ├─ teams-service/         # CRUD for teams
@@ -23,7 +23,7 @@ worldofsoccer-2025-microservice/
 Languages: mostly Java with a bit of Shell and Dockerfile content. 
 GitHub
 
-# ✅ Prerequisites
+# Prerequisites
 
 - JDK 17+ (recommended for Spring Boot 3.x projects)
 
@@ -34,7 +34,7 @@ GitHub
 - You don’t need to install Gradle; the repository ships with the Gradle wrapper (./gradlew). 
 GitHub
 
-# 🚀 Quick Start (Local, no Docker)
+#  Quick Start (Local, no Docker)
 
 From the project root:
 
@@ -64,7 +64,7 @@ cd ../api-gateway
 - Default Spring Boot port is 8080.
 - If services define custom ports in application.properties/application.yml, use those. (Check each service’s src/main/resources.)
 
-# 🐳 Run Everything with Docker
+#  Run Everything with Docker
 
 From the repo root:
 
@@ -79,7 +79,7 @@ docker compose down
 The compose file lives at the repository root. 
 GitHub
 
-# 🔗 Calling the APIs
+#  Calling the APIs
 
 - API Gateway will route requests to each backend service.
 
@@ -101,7 +101,7 @@ If you’re unsure of ports or paths, check:
 
 - The docker-compose.yml port mappings
 
-# 🧪 Testing
+#  Testing
 
 Run the full test suite:
 
@@ -116,7 +116,7 @@ There’s also a convenience script at the repo root:
 The test_all.bash helper exists at the top level. 
 GitHub
 
-🛠️ Common Gradle Tasks
+🛠 Common Gradle Tasks
 # Build everything
 ./gradlew build
 
@@ -126,7 +126,7 @@ GitHub
 # Format/verify (if you add plugins later)
 ./gradlew check
 
-🗂️ Environment & Configuration
+🗂 Environment & Configuration
 
 - Put service-specific settings in src/main/resources/application.yml (or .properties) per microservice.
 
@@ -138,7 +138,7 @@ Database URLs / credentials (if/when you add a DB)
 
 CORS and gateway route definitions
 
-# 🧭 Tips for Development
+# Tips for Development
 
 - Start backend services first, then the gateway.
 
@@ -148,7 +148,7 @@ CORS and gateway route definitions
 
 - Add /actuator/health to quickly verify services are up (via Spring Boot Actuator).
 
-# 👥 Contributing
+#  Contributing
 
 1. Fork the repo
 
@@ -160,10 +160,10 @@ CORS and gateway route definitions
 
 5. Open a PR
 
-# 📄 License
+#  License
 
 Pick a license (MIT/Apache-2.0/etc.) and add a LICENSE file at the repo root if you plan to share or reuse this code publicly.
 
-# ✍️ Author
+#  Author
 
 Tamim Afghanyar — 2025
